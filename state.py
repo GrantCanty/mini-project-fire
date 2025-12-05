@@ -69,8 +69,8 @@ def move_robot(state, robot, person, from_loc, to_loc):
         # check if room is not smokey or if robot is not carrying and the room is smokey
         if state.rooms[to_loc]['smokey'] == False or (state.robot_has_person[robot] == False and state.rooms[to_loc]['smokey'] == True ):
             state.robots_pos[robot] = to_loc
-            if state.robot_has_person[robot] == True:
-                state.persons[person]['position'] = to_loc
+            #if state.robot_has_person[robot] == True:
+            #    state.persons[person]['position'] = to_loc
         return True
     return False
 
