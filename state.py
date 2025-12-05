@@ -89,6 +89,20 @@ def pick_up_person(state, robot, person, location):
     return False
     pass
 
+def drop_person(state, robot, person, location):
+    # check if the person is carried, if the position of the robot and person match,
+    # if the robot is carrying someone, and if the robot is in the given location
+    if state.persons[person]['carried'] == True \
+    and state.robots_pos[robot] == state.persons[person]['position'] \
+    and state.robot_has_person[robot] == True \
+    and state.robot_pos[robot] == location:
+        state.persons[person]['carried'] = False
+        state.robot_has_person[robot] = False
+        state.robot_pos[robot] = location
+        state.persons[person]['position'] = location
+        return True
+    return False
+
 def evacuate_person(state, person):
     # TODO: Decompose into subtasks
     # Example: find_robot -> go_to_person -> pick_up ->
