@@ -54,24 +54,41 @@ state.connections = {
 }
 
 def refresh_people_count(state):
-    for people in state.persons:
-        state.persons[people]['number_of_people'] = 0
+    for room in state.rooms:
+        state.rooms[room]['number_of_people'] = 0
     
     for people in state.persons:
-        for room in state.rooms:
-            if state.persons[people]['position'] == room and state.persons[people]['carried'] == False:
-                state.rooms[room]['number_of_people'] += 1
-                # print(state.rooms[room]['number_of_people'])
+        person_data = state.persons[people]
+        if not person_data['carried']:
+            room = person_data['position']
+            state.rooms[room]['number_of_people'] += 1
+            #if state.persons[people]['position'] == room and state.persons[people]['carried'] == False:
+                #state.rooms[room]['number_of_people'] += 1
+                # print(state.rooms[room]['number_of_people']
+            return state
+    return False
 
-def move_robot(state, robot, person, from_loc, to_loc):
+def move_robot(state, robot, from_loc, to_loc):
     # check if there is a connection between the locations and if the robot is in the from location
     if to_loc in state.connections[from_loc] and state.robots_pos[robot] == from_loc:
         # check if room is not smokey or if robot is not carrying and the room is smokey
         if state.rooms[to_loc]['smokey'] == False or (state.robot_has_person[robot] == False and state.rooms[to_loc]['smokey'] == True ):
             state.robots_pos[robot] = to_loc
-            #if state.robot_has_person[robot] == True:
-            #    state.persons[person]['position'] = to_loc
-        return True
+
+            # Find the person whose position is the robot's name (i.e., the person being carried)
+            if state.robot_has_person[robot]:
+                carried_person_name = None
+                
+                # Iterate to find who is being carried by this specific robot
+                for person_name, person_data in state.persons.items():
+                    if person_data['position'] == robot and person_data['carried'] == True:
+                        carried_person_name = person_name
+                        break
+                
+                # If found, update the person's 'position' to the robot's new location
+                if carried_person_name:
+                    state.persons[carried_person_name]['position'] = to_loc
+        return state
     return False
 
 def pick_up_person(state, robot, person, location):
@@ -85,9 +102,8 @@ def pick_up_person(state, robot, person, location):
         state.robot_has_person[robot] = True
         state.robot_pos[robot] = location
         state.persons[person]['position'] = location
-        return True
+        return state
     return False
-    pass
 
 def drop_person(state, robot, person, location):
     # check if the person is carried, if the position of the robot and person match,
@@ -100,11 +116,10 @@ def drop_person(state, robot, person, location):
         state.robot_has_person[robot] = False
         state.robot_pos[robot] = location
         state.persons[person]['position'] = location
-        return True
+        return state
     return False
 
 def find_available_robot(state):
-    # return not state.robot_has_person[robot]
     avails = [robot for robot, is_carrying in state.robot_has_person.items() if is_carrying == False]
     if len(avails) > 0:
         return avails[0]
@@ -112,3 +127,4 @@ def find_available_robot(state):
 
 def evacuate_person(state, person):
     selected_robot = find_available_robot(state)
+
