@@ -5,17 +5,20 @@ from pyhop import hop
 state = hop.State('state0')
 
 state.robots_pos = {'robot1': 'exit', 'robot2': 'exit'}
-state.people_pos = {
-    'person1': 'office_a', 
-    'person2': 'office_a', 
-    'person3': 'office_a', 
-    'person4': 'office_c', 
-    'person5': 'office_c', 
-    'person6': 'room_1', 
-    'person7': 'room_1',
-    'person8': 'room_3',
-    'person9': 'room_3',
-    'person10': 'hall'
+
+state.robot_has_person = {'robot1': False, 'robot2': False}
+
+state.persons = {
+    'person1': {'position': 'office_a', 'carried': False},
+    'person2': {'position': 'office_a', 'carried': False},
+    'person3': {'position': 'office_a', 'carried': False},
+    'person4': {'position': 'office_c', 'carried': False},
+    'person5': {'position': 'office_c', 'carried': False},
+    'person6': {'position': 'room_1', 'carried': False},
+    'person7': {'position': 'room_1', 'carried': False},
+    'person8': {'position': 'room_3', 'carried': False},
+    'person9': {'position': 'room_3', 'carried': False},
+    'person10': {'position': 'hall', 'carried': False},
 }
 
 state.rooms = {
@@ -51,17 +54,23 @@ state.connections = {
 }
 
 def refresh_people_count(state):
-    for people in state.people_pos:
+    for people in state.persons:
         for room in state.rooms:
-            if state.people_pos[people] == room:
+            if state.persons[people]['position'] == room:
                 state.rooms[room]['number_of_people'] += 1
                 # print(state.rooms[room]['number_of_people'])
 
 def move_robot(state, robot, from_loc, to_loc):
+    # check if there is a connection between the locations and if the robot is in the from location
     if to_loc in state.connections[from_loc] and state.robots_pos[robot] == from_loc:
+        # check if robot has person and if room is smokey
+        if (state.robot_has_person[robot] == False and state.rooms[to_loc] )
         state.robots_pos[robot] = to_loc
         return True
     return False
+
+def pick_up_person(state, robot, location):
+
 
 def evacuate_person(state, person):
     # TODO: Decompose into subtasks
