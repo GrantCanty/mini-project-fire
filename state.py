@@ -103,8 +103,12 @@ def drop_person(state, robot, person, location):
         return True
     return False
 
+def find_available_robot(state):
+    # return not state.robot_has_person[robot]
+    avails = [robot for robot, is_carrying in state.robot_has_person.items() if is_carrying == False]
+    if len(avails) > 0:
+        return avails[0]
+    return None
+
 def evacuate_person(state, person):
-    # TODO: Decompose into subtasks
-    # Example: find_robot -> go_to_person -> pick_up ->
-    # go_to_exit -> drop_off
-    pass
+    selected_robot = find_available_robot(state)
