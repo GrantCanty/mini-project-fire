@@ -62,8 +62,6 @@ def refresh_people_count(state):
         if not person_data['carried']:
             room = person_data['position']
             state.rooms[room]['number_of_people'] += 1
-            return state
-    return False
 
 def move_robot(state, robot, from_loc, to_loc):
     refresh_people_count(state)
@@ -140,7 +138,6 @@ def find_path(connections, start_loc, goal_loc):
     
     # track visited rooms
     visited = {start_loc}
-
     path_found = False
 
     while queue:
@@ -176,8 +173,6 @@ def find_path(connections, start_loc, goal_loc):
     # path is constructed backwards. needs to be reversed
     path.reverse()
     
-    # remove the starting location
-    #return path[1:] 
     return path
 
 def travel(state, start, end, robot):
