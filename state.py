@@ -44,7 +44,7 @@ state.connections = {
     'corridor_1': ['room_2', 'stairs_2', 'room_3'],
     'corridor_2': ['stairs_2', 'office_b', 'office_c'],
     'room_1': ['stairs_1', 'room_2'],
-    'room_2': ['room1', 'corridor_1'],
+    'room_2': ['room_1', 'corridor_1'],
     'room_3': ['corridor_1'],
     'hall': ['stairs_1', 'reception'],
     'reception': ['hall', 'stairs_2'],
@@ -62,13 +62,12 @@ def refresh_people_count(state):
         if not person_data['carried']:
             room = person_data['position']
             state.rooms[room]['number_of_people'] += 1
-            #if state.persons[people]['position'] == room and state.persons[people]['carried'] == False:
-                #state.rooms[room]['number_of_people'] += 1
-                # print(state.rooms[room]['number_of_people']
             return state
     return False
 
 def move_robot(state, robot, from_loc, to_loc):
+    refresh_people_count(state)
+
     # check if there is a connection between the locations and if the robot is in the from location
     if to_loc in state.connections[from_loc] and state.robots_pos[robot] == from_loc:
         # check if room is not smokey or if robot is not carrying and the room is smokey
@@ -92,6 +91,7 @@ def move_robot(state, robot, from_loc, to_loc):
     return False
 
 def pick_up_person(state, robot, person, location):
+    refresh_people_count(state)
     # check the person is not carried, if the position of the robot and person match, 
     # if the robot is not carrying anyone, and if the robot is in the given location
     if state.persons[person]['carried'] == False \
@@ -106,6 +106,7 @@ def pick_up_person(state, robot, person, location):
     return False
 
 def drop_person(state, robot, person, location):
+    refresh_people_count(state)
     # check if the person is carried, if the position of the robot and person match,
     # if the robot is carrying someone, and if the robot is in the given location
     if state.persons[person]['carried'] == True \
@@ -124,6 +125,69 @@ def find_available_robot(state):
     if len(avails) > 0:
         return avails[0]
     return None
+
+import collections
+
+def find_path(connections, start_loc, goal_loc):
+    if start_loc == goal_loc:
+        return [start_loc]
+    
+    # pop from deque
+    queue = collections.deque([start_loc])
+    
+    # shortest path history
+    predecessors = {start_loc: None} 
+    
+    # track visited rooms
+    visited = {start_loc}
+
+    path_found = False
+
+    while queue:
+        current_loc = queue.popleft()
+
+        # all neighbors of the current location
+        for neighbor in connections.get(current_loc, []):
+            if neighbor not in visited:
+                # path history
+                predecessors[neighbor] = current_loc
+                visited.add(neighbor)
+                queue.append(neighbor)
+
+                # goal state
+                if neighbor == goal_loc:
+                    path_found = True
+                    break
+        
+        if path_found:
+            break
+
+    if not path_found:
+        return None
+
+    path = []
+    step = goal_loc
+    
+    # get path
+    while step is not None:
+        path.append(step)
+        step = predecessors.get(step)
+        
+    # path is constructed backwards. needs to be reversed
+    path.reverse()
+    
+    # remove the starting location
+    #return path[1:] 
+    return path
+
+def travel(state, start, end, robot):
+    path = find_path(state.connections, start, end)
+    for i in range(len(path) -1):
+        move_robot(state, robot, path[i], path[i+1])
+
+
+hop.declare_operators(travel, pick_up_person, drop_person)
+
 
 def evacuate_person(state, person):
     selected_robot = find_available_robot(state)
