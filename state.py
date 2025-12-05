@@ -55,22 +55,39 @@ state.connections = {
 
 def refresh_people_count(state):
     for people in state.persons:
+        state.persons[people]['number_of_people'] = 0
+    
+    for people in state.persons:
         for room in state.rooms:
-            if state.persons[people]['position'] == room:
+            if state.persons[people]['position'] == room and state.persons[people]['carried'] == False:
                 state.rooms[room]['number_of_people'] += 1
                 # print(state.rooms[room]['number_of_people'])
 
-def move_robot(state, robot, from_loc, to_loc):
+def move_robot(state, robot, person, from_loc, to_loc):
     # check if there is a connection between the locations and if the robot is in the from location
     if to_loc in state.connections[from_loc] and state.robots_pos[robot] == from_loc:
-        # check if robot has person and if room is smokey
-        if (state.robot_has_person[robot] == False and state.rooms[to_loc] )
-        state.robots_pos[robot] = to_loc
+        # check if room is not smokey or if robot is not carrying and the room is smokey
+        if state.rooms[to_loc]['smokey'] == False or (state.robot_has_person[robot] == False and state.rooms[to_loc]['smokey'] == True ):
+            state.robots_pos[robot] = to_loc
+            if state.robot_has_person[robot] == True:
+                state.persons[person]['position'] = to_loc
         return True
     return False
 
-def pick_up_person(state, robot, location):
-
+def pick_up_person(state, robot, person, location):
+    # check the person is not carried, if the position of the robot and person match, 
+    # if the robot is not carrying anyone, and if the robot is in the given location
+    if state.persons[person]['carried'] == False \
+    and state.robots_pos[robot] == state.persons[person]['position'] \
+    and state.robot_has_person[robot] == False \
+    and state.robot_pos[robot] == location:
+        state.persons[person]['carried'] = True
+        state.robot_has_person[robot] = True
+        state.robot_pos[robot] = location
+        state.persons[person]['position'] = location
+        return True
+    return False
+    pass
 
 def evacuate_person(state, person):
     # TODO: Decompose into subtasks
