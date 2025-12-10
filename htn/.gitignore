@@ -4,3 +4,6 @@ venv
 t.ipynb
 setup.py
 pyhop
+test.ipynb
+pyhop/*
+__pycache__
