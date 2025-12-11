@@ -3,18 +3,19 @@ from modeling.problem_1 import task_list, state
 from visualizer import EvacuationSimulation
 
 
-print(f'task_list in main.py: {task_list}')
-
-'''load = loader.EvacuationPlanner(task_list=task_list, state_obj=state, project_type= 'HTN')
+#print(f'task_list in main.py: {task_list}')
+'''project_type = 'HTN'
+load = loader.EvacuationPlanner(task_list=task_list, state_obj=state, project_type= project_type)
 
 plan = load.run_planner()
 
-sim = EvacuationSimulation(state)
+sim = EvacuationSimulation(state, project_type)
 sim.run(plan)'''
 
-load = loader.EvacuationPlanner(domain_file='/Users/cheoso/ai_projects/mini_fire_lab/src/modeling/evacuation-domain.pddl', problem_file='/Users/cheoso/ai_projects/mini_fire_lab/src/modeling/emergency-problem.pddl', project_type='PDDL')
+project_type = 'PDDL'
+load = loader.EvacuationPlanner(domain_file='/Users/cheoso/ai_projects/mini_fire_lab/src/modeling/evacuation-domain.pddl', problem_file='/Users/cheoso/ai_projects/mini_fire_lab/src/modeling/emergency-problem.pddl', project_type=project_type)
 
 plan = load.run_planner()
-print(plan)
-#sim = EvacuationSimulation(state)
-#sim.run(plan)
+print(f'plan: {plan}')
+sim = EvacuationSimulation(state, project_type)
+sim.run(plan)

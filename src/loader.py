@@ -3,6 +3,7 @@ import subprocess
 import re
 from modeling.domain import hop
 from modeling.problem_1 import state
+from pathlib import Path
 
 
 class EvacuationPlanner:
@@ -34,12 +35,34 @@ class EvacuationPlanner:
         return plan
 
     def _run_pddl_planner(self):
+        plan_path = Path('sas_plan')
+        
         """Call Fast Downward and retrieve plan"""
         result = subprocess.run(
-            ['./downward/fast-downward.py', '--plan-file', 'sas_plan', self.domain_file, self.problem_file],
+            ['./downward/fast-downward.py', "--plan-file", str(plan_path), self.domain_file, self.problem_file, '--search', 'lazy_greedy([ff()], preferred=[ff()])'],
             capture_output=True, text=True
         )
-        return result.stdout
+        success = result.returncode == 0 and plan_path.exists()
+
+        plan_text = None
+        if success is not None:
+            try:
+                plan_text = plan_path.read_text()
+                print(f'plan_text plan:\n{plan_text}')
+                actions = []
+
+                for raw in plan_text.splitlines():
+                    line = raw.strip()
+
+                    if line.startswith("(") and line.endswith(")"):
+                        inside = line[1:-1].strip()
+                        parts = inside.split()
+
+                        actions.append(tuple(parts))
+            except Exception as e:
+                print(e)
+        
+        return actions
 
     def parse_plan(self, plan_output):
         """Return a uniform plan list usable by visualizer"""
@@ -75,3 +98,17 @@ class EvacuationPlanner:
                     self.state.robot_has_person[robot] = False
                     self.state.persons[person]['carried'] = False
                     self.state.persons[person]['position'] = loc
+            
+            else:
+                steps = []
+                print(f'pddl plan:\n{plan}')
+                for action in plan:  # action is ("move", "robot1", "office_a", "office_b")
+                    name = action[0]
+                    params = action[1:]
+
+                    steps.append({
+                        "action": name,
+                        "params": params
+                    })
+
+                return steps

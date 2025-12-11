@@ -8,48 +8,48 @@ state.robots_pos = {'robot1': 'exit', 'robot2': 'exit'}
 state.robot_has_person = {'robot1': False, 'robot2': False}
 
 state.persons = {
-    'person1': {'position': 'office_a', 'carried': False},
-    'person2': {'position': 'office_a', 'carried': False},
-    'person3': {'position': 'office_a', 'carried': False},
-    'person4': {'position': 'office_c', 'carried': False},
-    'person5': {'position': 'office_c', 'carried': False},
-    'person6': {'position': 'room_1', 'carried': False},
-    'person7': {'position': 'room_1', 'carried': False},
-    'person8': {'position': 'room_3', 'carried': False},
-    'person9': {'position': 'room_3', 'carried': False},
-    'person10': {'position': 'hall', 'carried': False},
+    'p1': {'position': 'office-a', 'carried': False},
+    'p2': {'position': 'office-a', 'carried': False},
+    'p3': {'position': 'office-a', 'carried': False},
+    'p4': {'position': 'office-c', 'carried': False},
+    'p5': {'position': 'office-c', 'carried': False},
+    'p6': {'position': 'room-1', 'carried': False},
+    'p7': {'position': 'room-1', 'carried': False},
+    'p8': {'position': 'room-3', 'carried': False},
+    'p9': {'position': 'room-3', 'carried': False},
+    'p10': {'position': 'hall', 'carried': False},
 }
 
 state.rooms = {
-    'office_a': {'smokey': False, 'number_of_people': 0}, 
-    'office_b': {'smokey': True, 'number_of_people': 0}, 
-    'office_c': {'smokey': False, 'number_of_people': 0}, 
-    'corridor_1': {'smokey': False, 'number_of_people': 0}, 
-    'corridor_2': {'smokey': False, 'number_of_people': 0}, 
-    'room_1': {'smokey': False, 'number_of_people': 0}, 
-    'room_2': {'smokey': True, 'number_of_people': 0}, 
-    'room_3': {'smokey': False, 'number_of_people': 0}, 
+    'office-a': {'smokey': False, 'number_of_people': 0}, 
+    'office-b': {'smokey': True, 'number_of_people': 0}, 
+    'office-c': {'smokey': False, 'number_of_people': 0}, 
+    'corridor-1': {'smokey': False, 'number_of_people': 0}, 
+    'corridor-2': {'smokey': False, 'number_of_people': 0}, 
+    'room-1': {'smokey': False, 'number_of_people': 0}, 
+    'room-2': {'smokey': True, 'number_of_people': 0}, 
+    'room-3': {'smokey': False, 'number_of_people': 0}, 
     'hall': {'smokey': False, 'number_of_people': 0}, 
     'reception': {'smokey': False, 'number_of_people': 0}, 
     'exit': {'smokey': False, 'number_of_people': 0}, 
-    'stairs_1': {'smokey': False, 'number_of_people': 0},
-    'stairs_2': {'smokey': False, 'number_of_people': 0}
+    'stairs-left': {'smokey': False, 'number_of_people': 0},
+    'stairs-right': {'smokey': False, 'number_of_people': 0}
 }
 
 state.connections = {
-    'office_a': ['stairs_1', 'office_b'],
-    'office_b': ['office_a', 'corridor_2'],
-    'office_c': ['corridor_2'],
-    'corridor_1': ['room_2', 'stairs_2', 'room_3'],
-    'corridor_2': ['stairs_2', 'office_b', 'office_c'],
-    'room_1': ['stairs_1', 'room_2'],
-    'room_2': ['room_1', 'corridor_1'],
-    'room_3': ['corridor_1'],
-    'hall': ['stairs_1', 'reception'],
-    'reception': ['hall', 'stairs_2', 'exit'],
+    'office-a': ['stairs-left', 'office-b'],
+    'office-b': ['office-a', 'corridor-2'],
+    'office-c': ['corridor-2'],
+    'corridor-1': ['room-2', 'stairs-right', 'room-3'],
+    'corridor-2': ['stairs-right', 'office-b', 'office-c'],
+    'room-1': ['stairs-left', 'room-2'],
+    'room-2': ['room-1', 'corridor-1'],
+    'room-3': ['corridor-1'],
+    'hall': ['stairs-left', 'reception'],
+    'reception': ['hall', 'stairs-right', 'exit'],
     'exit': ['reception'],
-    'stairs_1': ['hall', 'room_1', 'office_a'],
-    'stairs_2': ['reception', 'corridor_1', 'corridor_2']
+    'stairs-left': ['hall', 'room-1', 'office-a'],
+    'stairs-right': ['reception', 'corridor-1', 'corridor-2']
 }
 
 '''if __name__ == "__main__":
@@ -57,8 +57,8 @@ state.connections = {
     print(f'state: {state}')'''
 
 people_list = [
-    'person1', 'person2', 'person3', 'person4', 'person5',
-    'person6', 'person7', 'person7', 'person9', 'person10'
+    'p1', 'p2', 'p3', 'p4', 'p5',
+    'p6', 'p7', 'p8', 'p9', 'p10'
 ]
 
 # split up the people into even and odd indexes
