@@ -1,0 +1,20 @@
+import loader
+from modeling.problem_1 import task_list, state
+from visualizer import EvacuationSimulation
+
+
+print(f'task_list in main.py: {task_list}')
+
+'''load = loader.EvacuationPlanner(task_list=task_list, state_obj=state, project_type= 'HTN')
+
+plan = load.run_planner()
+
+sim = EvacuationSimulation(state)
+sim.run(plan)'''
+
+load = loader.EvacuationPlanner(domain_file='/Users/cheoso/ai_projects/mini_fire_lab/src/modeling/evacuation-domain.pddl', problem_file='/Users/cheoso/ai_projects/mini_fire_lab/src/modeling/emergency-problem.pddl', project_type='PDDL')
+
+plan = load.run_planner()
+print(plan)
+#sim = EvacuationSimulation(state)
+#sim.run(plan)

@@ -1,4 +1,4 @@
-from pyhop import hop
+from .pyhop import hop
 # from . import problem_1
 
 def refresh_people_count(state):
