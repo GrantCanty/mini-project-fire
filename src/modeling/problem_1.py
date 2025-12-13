@@ -71,19 +71,20 @@ for i, person in enumerate(state.persons):
     robot = 'robot1' if i % 2 == 0 else 'robot2'
     task_list.append(('evacuate_person_with_robot', robot, person))
 
-'''print("--- Starting Planning ---")
+'''if __name__ == '__main__':
+    print("--- Starting Planning ---")
 
-print(hop.get_operators())
-print(hop.get_methods())
+    print(hop.get_operators())
+    print(hop.get_methods())
 
-plan = hop.plan(state, task_list, hop.get_operators(),hop.get_methods(),verbose=1)
+    plan = hop.plan(state, task_list, hop.get_operators(),hop.get_methods(),verbose=1)
 
-# 4. Display the results
-if plan:
-    print("Success! Plan Found:")
-    for step in plan:
-        print(f"  {step}")
-    print(f"Final State: Robot1 at {state.robots_pos['robot1']}")
-    
-else:
-    print("Failure! Could not find a plan.")'''
+    # 4. Display the results
+    if plan:
+        print("Success! Plan Found:")
+        for step in plan:
+            print(f"  {step}")
+        print(f"Final State: Robot1 at {state.robots_pos['robot1']}")
+        
+    else:
+        print("Failure! Could not find a plan.")'''
