@@ -7,6 +7,8 @@ project_type = 'PDDL'
 load = loader.EvacuationPlanner(domain_file='/Users/cheoso/ai_projects/mini_fire_lab/src/modeling/evacuation-domain.pddl', problem_file='/Users/cheoso/ai_projects/mini_fire_lab/src/modeling/emergency-problem.pddl', project_type=project_type)
 
 plan = load.run_planner()
+
 print(f'plan: {plan}')
+print(f'plan len: {len(plan)}')
 sim = EvacuationSimulation(state, project_type)
 sim.run(plan)

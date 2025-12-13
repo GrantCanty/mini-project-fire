@@ -5,6 +5,8 @@ from modeling.domain import hop
 from modeling.problem_1 import state
 from pathlib import Path
 
+import time
+
 
 class EvacuationPlanner:
     def __init__(self, project_type='HTN', domain_file=None, problem_file=None, task_list=None, state_obj=None):
@@ -16,6 +18,7 @@ class EvacuationPlanner:
 
     def run_planner(self):
         if self.project_type.upper() == 'PDDL':
+            #now 
             return self._run_pddl_planner()
         else:
             return self._run_htn_planner()
@@ -25,6 +28,7 @@ class EvacuationPlanner:
         print(f'methods: {hop.get_methods()}')
         print(f'task_list: {self.task_list}')
         
+        start = time.time()
         plan = hop.plan(
             self.state,
             self.task_list,
@@ -32,6 +36,8 @@ class EvacuationPlanner:
             hop.get_methods(),
             verbose=0
         )
+        end = time.time()
+        print(f'time to build plan: {end - start}')
         return plan
 
     def _run_pddl_planner(self):
@@ -43,12 +49,13 @@ class EvacuationPlanner:
             capture_output=True, text=True
         )
         success = result.returncode == 0 and plan_path.exists()
+        print(result)
 
         plan_text = None
         if success is not None:
             try:
                 plan_text = plan_path.read_text()
-                print(f'plan_text plan:\n{plan_text}')
+                #print(f'plan_text plan:\n{plan_text}')
                 actions = []
 
                 for raw in plan_text.splitlines():

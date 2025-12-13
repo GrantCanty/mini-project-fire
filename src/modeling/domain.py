@@ -167,6 +167,9 @@ def travel_wrapper(state, robot, start_loc, end_loc):
         avail_rooms = [room for room in state.rooms if state.rooms[room]['smokey'] == False]
         avail_conns = {conn: val for conn, val in state.connections.items() if conn in avail_rooms}
         path_steps = find_path(avail_conns, start_loc, end_loc)
+    
+    print(f'start_loc: {start_loc} - end_loc: {end_loc}')
+    print(f'path: {path_steps}')
 
     if path_steps is None:
         return False 
